@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Custom NFC Contact Cards</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Custom animation for the sliding text */
+        .audience-list {
+            animation: slide-up 12.5s linear infinite;
+        }
+
+        @keyframes slide-up {
+            0%   { transform: translateY(0); }
+            16%  { transform: translateY(0); } /* Pause on item 1 */
+            20%  { transform: translateY(-3rem); } /* Slide to item 2 */
+            36%  { transform: translateY(-3rem); } /* Pause on item 2 */
+            40%  { transform: translateY(-6rem); } /* Slide to item 3 */
+            56%  { transform: translateY(-6rem); } /* Pause on item 3 */
+            60%  { transform: translateY(-9rem); } /* Slide to item 4 */
+            76%  { transform: translateY(-9rem); } /* Pause on item 4 */
+            80%  { transform: translateY(-12rem); } /* Slide to item 5 */
+            96%  { transform: translateY(-12rem); } /* Pause on item 5 */
+            100% { transform: translateY(-15rem); } /* Slide to duplicate to reset */
+        }
+
+        /* Apply custom fonts */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000;
+            color: #fff;
+        }
+        .font-poppins {
+            font-family: 'Poppins', sans-serif;
+        }
+
+        /* Custom properties for card interaction */
+        #nfc-card {
+            transition: transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease;
+        }
+        
+        .audience-list li {
+            height: 3rem;
+            font-size: clamp(1.8rem, 3vw, 2.5rem);
+            font-weight: 700;
+            font-family: 'Poppins', sans-serif;
+            color: #967e2d;
+            display: flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: transparent;
+            border-left: 4px solid #967e2d;
+        }
+    </style>
+    <link rel="stylesheet" href="/index.css">
+</head>
+    <body>
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+
+        <section class="relative w-full min-h-screen flex flex-col justify-center items-center p-4 sm:p-8 font-['Inter'] text-white overflow-hidden">
+            <!-- Default background at z-index: -20 -->
+            <div
+                 class="absolute inset-0 bg-cover bg-center -z-20"
+                 style="background-image: url('https://bucket.mlcdn.com/a/3336/3336910/images/9672dc17e29b8b9a56a45055979c9627f6eb1139.png')">
+            </div>
+            <!-- Black overlay -->
+            <div class="absolute inset-0 bg-black/50 -z-10"></div>
+            
+            <!-- Hand Image background Layer with z-index: -1 -->
+            <div class="absolute inset-0 -z-[1] pointer-events-none">
+                <img src="https://bucket.mlcdn.com/a/3336/3336910/images/6ad05cc1b77a1cd843ba617e67eb19352c60be3b.png"
+                     alt=""
+                     class="w-full h-full object-cover object-right" />
+            </div>
+
+            <div class="relative flex flex-col lg:flex-row items-center justify-center gap-8 max-w-7xl w-full">
+                <!-- Text Content -->
+                <div class="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left order-2 lg:order-1 lg:pr-12">
+                    <h1 class="font-poppins font-semibold text-5xl md:text-6xl leading-tight mb-4">
+                        Tarjetas de Contacto <span class="text-[#967e2d]">NFC</span> Personalizadas
+                    </h1>
+                    <div class="h-12 overflow-hidden mb-4">
+                        <ul class="audience-list list-none p-0 m-0">
+                            <li class="h-12 text-3xl md:text-4xl font-poppins font-bold text-[#967e2d] flex items-center justify-center lg:justify-start">Para Profesionales</li>
+                            <li class="h-12 text-3xl md:text-4xl font-poppins font-bold text-[#967e2d] flex items-center justify-center lg:justify-start">Para Empresarios</li>
+                            <li class="h-12 text-3xl md:text-4xl font-poppins font-bold text-[#967e2d] flex items-center justify-center lg:justify-start">Para Emprendedores</li>
+                            <li class="h-12 text-3xl md:text-4xl font-poppins font-bold text-[#967e2d] flex items-center justify-center lg:justify-start">Para Solopreneurs</li>
+                            <li class="h-12 text-3xl md:text-4xl font-poppins font-bold text-[#967e2d] flex items-center justify-center lg:justify-start">Para Ejecutivos</li>
+                            <!-- Duplicate first item for seamless loop -->
+                            <li class="h-12 text-3xl md:text-4xl font-poppins font-bold text-[#967e2d] flex items-center justify-center lg:justify-start">Para Profesionales</li>
+                        </ul>
+                    </div>
+                    
+                    
+                    <p class="max-w-xl text-lg text-gray-200 mb-6">
+                        Transforma tu networking con nuestras tarjetas NFC de alta calidad. Comparte tu información de contacto, redes sociales y portafolio con un simple toque. Diseños premium personalizados para reflejar tu marca personal.
+                    </p>
+                    <a href="#contact" class="inline-block bg-gradient-to-r from-[#967e2d] via-[#d4b95c] to-[#967e2d] bg-[size:200%_auto] text-black font-bold py-4 px-10 rounded-full no-underline mt-0 transition-all duration-300 ease-in-out font-poppins text-xl shadow-lg shadow-[#967e2d]/40 hover:bg-right-center hover:-translate-y-1 hover:shadow-xl hover:shadow-[#967e2d]/60">
+                        Catálogo de Productos
+                    </a>
+                </div>
+                
+                <!-- Visual Content (Card) -->
+                <div class="flex-1 w-full max-w-lg lg:max-w-none flex justify-center items-center order-1 lg:order-2 relative">
+                    <!-- Interactive Card, positioned relatively to sit on top of background layers -->
+                    <div id="card-container"
+                         class="w-full max-w-lg aspect-[756/432] [perspective:1000px] cursor-pointer relative">
+                        <div id="nfc-card"
+                             class="w-full h-full relative [transform-style:preserve-3d]">
+                            <!-- Card Front -->
+                            <div class="absolute w-full h-full [backface-visibility:hidden] rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
+                                <img id="card-front-img" src="" alt="NFC Card Front" class="w-full h-full object-cover" />
+                            </div>
+                            <!-- Card Back -->
+                            <div class="absolute w-full h-full [backface-visibility:hidden] [transform:rotateY(180deg)] rounded-2xl overflow-hidden shadow-2xl shadow-black/50">
+                                <img id="card-back-img" src="" alt="NFC Card Back" class="w-full h-full object-cover" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            const cardContainer = document.getElementById('card-container');
+            const nfcCard = document.getElementById('nfc-card');
+            const cardFrontImg = document.getElementById('card-front-img');
+            const cardBackImg = document.getElementById('card-back-img');
+
+            const cards = [
+                {
+                    front: 'https://bucket.mlcdn.com/a/3336/3336910/images/5cccd4c9ef3821bae9e77c4289f19cda7078a373.png',
+                    back: 'https://bucket.mlcdn.com/a/3336/3336910/images/4dfab9214992900da29ed7c4634c80227d51a1b6.png'
+                },
+                {
+                    front: 'https://bucket.mlcdn.com/a/3336/3336910/images/6df2574e40994f31c2333066348301718055c50c.png',
+                    back: 'https://bucket.mlcdn.com/a/3336/3336910/images/1545464195156a00c6d36e84860b73c49c7161b9.png'
+                },
+                {
+                    front: 'https://bucket.mlcdn.com/a/3336/3336910/images/55949d110f0f4b306a445a4729f273cd63d6f1c7.png',
+                    back: 'https://bucket.mlcdn.com/a/3336/3336910/images/8ed7d825a7e638b97d1b33368c0928236594d546.png'
+                },
+                {
+                    front: 'https://bucket.mlcdn.com/a/3336/3336910/images/8a204648792040b171c726353d207c4273c5979c.png',
+                    back: 'https://bucket.mlcdn.com/a/3336/3336910/images/b07a513d80326075908b1a8f94d2325c8f615f79.png'
+                }
+            ];
+
+            let currentCardIndex = 0;
+            let isFlipped = false;
+
+            // Set initial images
+            cardFrontImg.src = cards[currentCardIndex].front;
+            cardBackImg.src = cards[currentCardIndex].back;
+
+            // Click to flip or change card
+            cardContainer.addEventListener('click', () => {
+                if (isFlipped) {
+                    // Was showing back, now switch to NEXT card's FRONT
+                    nfcCard.style.opacity = '0';
+                    setTimeout(() => {
+                        isFlipped = false;
+                        currentCardIndex = (currentCardIndex + 1) % cards.length;
+                        cardFrontImg.src = cards[currentCardIndex].front;
+                        cardBackImg.src = cards[currentCardIndex].back;
+                        nfcCard.style.transform = 'rotateY(0deg)';
+                        nfcCard.style.opacity = '1';
+                    }, 300);
+                } else {
+                    // Was showing front, now flip to CURRENT card's BACK
+                    isFlipped = true;
+                    nfcCard.style.transform = 'rotateY(180deg)';
+                }
+            });
+
+            // Mouse move for 3D effect
+            cardContainer.addEventListener('mousemove', (e) => {
+                if (isFlipped) return; // Don't apply hover effect when flipped
+
+                const rect = cardContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                const { width, height } = rect;
+
+                const xAxis = (width / 2 - x) / 15;
+                const yAxis = -(height / 2 - y) / 15;
+
+                nfcCard.style.transform = `rotateY(${xAxis}deg) rotateX(${yAxis}deg)`;
+            });
+
+            // Mouse enter to speed up transition for hover
+            cardContainer.addEventListener('mouseenter', () => {
+                nfcCard.style.transition = 'transform 0.1s ease, opacity 0.3s ease';
+            });
+
+            // Mouse leave to reset card and slow down transition
+            cardContainer.addEventListener('mouseleave', () => {
+                nfcCard.style.transition = 'transform 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.3s ease';
+
+                // Reset to the correct orientation (flipped or not)
+                if (isFlipped) {
+                    nfcCard.style.transform = 'rotateY(180deg)';
+                } else {
+                    nfcCard.style.transform = 'rotateY(0deg) rotateX(0deg)';
+                }
+            });
+        </script>
+    <script type="module" src="/index.tsx"></script>
+</body>
+</html>
