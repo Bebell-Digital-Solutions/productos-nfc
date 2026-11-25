@@ -1,0 +1,1489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NFC Contact Cards · Black Friday for Real Estate Brokers</title>
+  <link href='https://fonts.googleapis.com/css?family=Playfair Display SC' rel='stylesheet'>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* ---------- GLOBAL / RESET ---------- */
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --primary: #967e2d;
+      --primary-hover: #ab9239;
+      --primary-light: #c9b25e;
+      --navbar-bg: #000000;
+      --black: #0b0b0b;
+      --black-soft: #141414;
+      --white: #ffffff;
+      --gray-100: #f5f5f5;
+      --gray-200: #e0e0e0;
+      --gray-500: #6b6b6b;
+      --gray-800: #1e1e1e;
+      --card-bg: #1a1a1a;
+      --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+      --radius: 20px;
+    }
+
+    body {
+      margin: 0;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      background-color: var(--black);
+      color: var(--white);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    /* ---------- NAVBAR (exact as provided, with minor z-index) ---------- */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      width: 100%;
+      background: var(--navbar-bg);
+    }
+
+    .navbar__inner {
+      position: relative;
+      max-width: 2200px;
+      min-width: 100%;
+      margin: 0 auto;
+      padding: 0 20px;
+      min-height: 88px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .navbar__logo {
+      flex: 0 0 auto;
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .navbar__logo img {
+      width: 250px;
+      height: auto;
+      display: block;
+    }
+
+    .navbar__nav {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .navbar__nav > a,
+    .navbar__dropdown-toggle {
+      font-family: 'Inter', sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1;
+      color: var(--primary);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: color .2s ease;
+    }
+
+    .navbar__nav > a:hover,
+    .navbar__dropdown-toggle:hover {
+      color: var(--primary-light);
+    }
+
+    .navbar__dropdown {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .navbar__dropdown-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .navbar__chevron {
+      transition: transform .2s ease;
+    }
+
+    .navbar__submenu {
+      list-style: none;
+      margin: 0;
+      padding: 12px;
+      position: absolute;
+      top: calc(100% + 12px);
+      left: 0;
+      min-width: 560px;
+      background: var(--navbar-bg);
+      border: 1px solid rgba(150, 126, 45, .3);
+      border-radius: 12px;
+      box-shadow: 0 12px 24px rgba(0, 0, 0, .5);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(-6px);
+      transition: opacity .18s ease, transform .18s ease, visibility .18s ease;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 220px;
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .navbar__dropdown::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 100%;
+      height: 14px;
+    }
+
+    .navbar__dropdown:hover .navbar__submenu,
+    .navbar__dropdown:focus-within .navbar__submenu {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .navbar__dropdown:hover .navbar__chevron {
+      transform: rotate(180deg);
+    }
+
+    .navbar__submenu-links {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 2px;
+      height: 100%;
+    }
+
+    .navbar__submenu-links a {
+      display: block;
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 14px;
+      color: var(--primary);
+      transition: background .15s ease, color .15s ease;
+      text-decoration: none;
+    }
+
+    .navbar__submenu-links a:hover {
+      background: rgba(150, 126, 45, .15);
+      color: var(--primary-light);
+    }
+
+    .navbar__submenu-preview {
+      position: relative;
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(150, 126, 45, .08);
+      border: 1px solid rgba(150, 126, 45, .25);
+      min-height: 180px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .navbar__submenu-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: opacity .2s ease;
+    }
+
+    .navbar__translate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      color: var(--primary);
+      text-decoration: none;
+      border: 1px solid rgba(150, 126, 45, .35);
+      background: rgba(150, 126, 45, .08);
+      transition: background .2s ease, color .2s ease, transform .2s ease, border-color .2s ease;
+      flex: 0 0 auto;
+    }
+
+    .navbar__translate:hover {
+      background: rgba(150, 126, 45, .18);
+      border-color: rgba(150, 126, 45, .6);
+      color: white;
+      transform: translateY(-1px);
+    }
+
+    .navbar__translate svg {
+      width: 20px;
+      height: 20px;
+      display: block;
+    }
+
+    .navbar__nav a.navbar__cta {
+      background: linear-gradient(180deg, #a8903a 0%, var(--primary) 100%);
+      color: #fff;
+      font-weight: 600;
+      padding: 15px 32px;
+      border: 1px solid var(--primary-light);
+      border-radius: 50px;
+      margin-left: 6px;
+      position: relative;
+      isolation: isolate;
+      transition: background .25s ease, transform .2s ease, box-shadow .25s ease;
+      text-decoration: none;
+    }
+
+    .navbar__nav a.navbar__cta::before {
+      content: "";
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: linear-gradient(180deg, rgba(201, 178, 94, .45), rgba(150, 126, 45, .15));
+      filter: blur(10px);
+      opacity: 0.55;
+      z-index: -1;
+      transition: opacity .25s ease, filter .25s ease;
+    }
+
+    .navbar__nav a.navbar__cta:hover {
+      background: linear-gradient(180deg, #b89e45 0%, var(--primary-hover) 100%);
+      color: #fff;
+      transform: translateY(-2px);
+      border-radius: 50px;
+    }
+
+    .navbar__nav a.navbar__cta:hover::before {
+      opacity: 0.9;
+      filter: blur(14px);
+    }
+
+    .navbar__nav a.navbar__cta:active {
+      transform: translateY(0);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset,
+        0 -1px 0 rgba(0, 0, 0, 0.4) inset,
+        0 1px 3px rgba(0, 0, 0, 0.5),
+        0 4px 10px rgba(150, 126, 45, 0.35);
+    }
+
+    .navbar__toggle {
+      display: none;
+      margin-left: auto;
+      width: 44px;
+      height: 44px;
+      padding: 10px;
+      flex-direction: column;
+      justify-content: space-between;
+      background: transparent;
+      border: 0;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    .navbar__toggle span {
+      display: block;
+      width: 100%;
+      height: 2px;
+      border-radius: 2px;
+      background: var(--primary);
+      transition: transform .25s ease, opacity .2s ease;
+    }
+
+    .navbar__toggle.is-open span:nth-child(1) {
+      transform: translateY(11px) rotate(45deg);
+    }
+
+    .navbar__toggle.is-open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .navbar__toggle.is-open span:nth-child(3) {
+      transform: translateY(-11px) rotate(-45deg);
+    }
+
+    @media (max-width: 1150px) {
+      .navbar__inner {
+        padding: 0 20px;
+        min-height: 76px;
+      }
+
+      .navbar__toggle {
+        display: flex;
+      }
+
+      .navbar__nav {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        margin-left: 0;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0;
+        padding: 6px 20px 20px;
+        background: var(--navbar-bg);
+        border-top: 1px solid rgba(150, 126, 45, .25);
+        box-shadow: 0 12px 24px rgba(0, 0, 0, .5);
+        max-height: calc(100vh - 76px);
+        overflow-y: auto;
+        border-radius: 0 0 16px 16px;
+      }
+
+      .navbar__nav.is-open {
+        display: flex;
+      }
+
+      .navbar__nav > a,
+      .navbar__dropdown-toggle {
+        font-size: 16px;
+        padding: 15px 0;
+        border-bottom: 0px solid rgba(255, 255, 255, .07);
+      }
+
+      .navbar__nav a.navbar__cta {
+        margin: 18px 0 0;
+        padding: 15px 22px;
+        text-align: center;
+        font-size: 16px;
+        border-bottom: 0;
+        border-radius: 50px;
+        box-shadow: 0 1px 0 rgba(255, 255, 255, 0.25) inset,
+          0 -1px 0 rgba(0, 0, 0, 0.35) inset,
+          0 2px 6px rgba(0, 0, 0, 0.4),
+          0 6px 14px rgba(150, 126, 45, 0.3);
+      }
+
+      .navbar__translate {
+        width: 100%;
+        height: auto;
+        border-radius: 8px;
+        padding: 14px 0;
+        margin-top: 12px;
+        justify-content: flex-start;
+        gap: 10px;
+        border: 0;
+        border-bottom: none;
+        background: transparent;
+      }
+
+      .navbar__translate:hover {
+        background: transparent;
+        transform: none;
+      }
+
+      .navbar__dropdown {
+        display: block;
+        width: 100%;
+      }
+
+      .navbar__dropdown::after {
+        display: none;
+      }
+
+      .navbar__dropdown-toggle {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
+        padding: 15px 0;
+        border-bottom: 0px solid rgba(255, 255, 255, .07);
+      }
+
+      .navbar__submenu {
+        position: static;
+        min-width: 0;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        border: 0;
+        border-radius: 0;
+        background: transparent;
+        padding: 0 0 0 16px;
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .25s ease, padding .25s ease;
+        display: block;
+        grid-template-columns: none;
+      }
+
+      .navbar__dropdown.is-open .navbar__submenu {
+        max-height: 500px;
+        padding: 4px 0 10px 16px;
+      }
+
+      .navbar__dropdown.is-open .navbar__chevron {
+        transform: rotate(180deg);
+      }
+
+      .navbar__submenu-preview {
+        display: none;
+      }
+
+      .navbar__submenu-links {
+        display: block;
+        height: auto;
+      }
+
+      .navbar__submenu-links a {
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255, 255, 255, .05);
+        font-size: 15px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .navbar__inner {
+        padding: 0 16px;
+      }
+      .navbar__logo img {
+        width: 260px;
+      }
+    }
+
+    /* ---------- UTILITIES ---------- */
+    .container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .section {
+      padding: 100px 0;
+    }
+
+    .section--dark {
+      background: var(--black-soft);
+    }
+
+    .section-title {
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+      font-family: 'Playfair Display SC', serif;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: #b0b0b0;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+      text-align: center;
+    }
+
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary-light), var(--primary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      padding: 18px 44px;
+      border-radius: 60px;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      cursor: pointer;
+      border: none;
+      white-space: nowrap;
+    }
+
+    .btn-primary {
+      background: linear-gradient(180deg, #a8903a 0%, var(--primary) 100%);
+      color: #fff;
+      border: 1px solid var(--primary-light);
+      box-shadow: 0 8px 24px rgba(150, 126, 45, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(180deg, #b89e45 0%, var(--primary-hover) 100%);
+      transform: translateY(-3px);
+      box-shadow: 0 16px 32px rgba(150, 126, 45, 0.4);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--primary-light);
+      border: 1.5px solid rgba(150, 126, 45, 0.5);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--primary-light);
+      background: rgba(150, 126, 45, 0.1);
+      transform: translateY(-2px);
+    }
+
+    /* ---------- ANIMATIONS (scroll reveal) ---------- */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      position: relative;
+      padding: 120px 0 100px;
+      background: radial-gradient(ellipse at 50% 0%, rgba(150, 126, 45, 0.15) 0%, transparent 70%);
+      overflow: hidden;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201, 178, 94, 0.08) 0%, transparent 70%);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .hero__content {
+      max-width: 900px;
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero__badge {
+      display: inline-block;
+      background: rgba(150, 126, 45, 0.2);
+      border: 1px solid rgba(150, 126, 45, 0.4);
+      color: var(--primary-light);
+      font-weight: 600;
+      font-size: 0.9rem;
+      padding: 8px 22px;
+      border-radius: 60px;
+      margin-bottom: 24px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    .hero__title {
+      font-family: 'Playfair Display SC', serif;
+      font-size: 4rem;
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.02em;
+      margin-bottom: 24px;
+    }
+
+    .hero__subtitle {
+      font-size: 1.35rem;
+      color: #c0c0c0;
+      max-width: 650px;
+      margin: 0 auto 40px;
+    }
+
+    .hero__actions {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .hero__promo {
+      margin-top: 40px;
+      font-size: 1rem;
+      color: var(--primary-light);
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+    }
+
+    .hero__promo .dot {
+      width: 8px;
+      height: 8px;
+      background: #4caf50;
+      border-radius: 50%;
+      display: inline-block;
+      animation: pulse-dot 1.5s infinite;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.8); }
+    }
+
+    /* ---------- STATS COUNTER ---------- */
+    .stats {
+      padding: 60px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(20, 20, 20, 0.6);
+    }
+
+    .stats__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 40px;
+      text-align: center;
+    }
+
+    .stat__number {
+      font-size: 3.5rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      line-height: 1.1;
+      font-family: 'Playfair Display SC', serif;
+    }
+
+    .stat__label {
+      font-size: 1rem;
+      color: #a0a0a0;
+      margin-top: 8px;
+      letter-spacing: 0.03em;
+    }
+
+    /* ---------- LOGO SLIDER ---------- */
+    .logos {
+      padding: 60px 0 80px;
+      background: var(--black);
+      overflow: hidden;
+    }
+
+    .logos__track {
+      display: flex;
+      gap: 60px;
+      width: max-content;
+      animation: slide 30s linear infinite;
+      align-items: center;
+    }
+
+    .logos__track img {
+      height: 40px;
+      width: auto;
+      opacity: 0.5;
+      filter: grayscale(1) brightness(1.8);
+      transition: opacity 0.3s;
+    }
+
+    .logos__track img:hover {
+      opacity: 1;
+    }
+
+    @keyframes slide {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ---------- FEATURES ---------- */
+    .features__grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 30px;
+      margin-top: 20px;
+    }
+
+    .feature-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(150, 126, 45, 0.15);
+      border-radius: var(--radius);
+      padding: 40px 30px;
+      transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(150, 126, 45, 0.45);
+      box-shadow: 0 24px 48px -12px rgba(0, 0, 0, 0.6);
+    }
+
+    .feature-card__icon {
+      width: 56px;
+      height: 56px;
+      background: rgba(150, 126, 45, 0.15);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      color: var(--primary-light);
+    }
+
+    .feature-card__icon svg {
+      width: 28px;
+      height: 28px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    .feature-card p {
+      color: #a8a8a8;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    /* ---------- PRODUCT BLOCK ---------- */
+    .product {
+      background: var(--black-soft);
+    }
+
+    .product__wrapper {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .product__image {
+      position: relative;
+      border-radius: var(--radius);
+      overflow: hidden;
+      border: 1px solid rgba(150, 126, 45, 0.2);
+      box-shadow: var(--shadow-xl);
+    }
+
+    .product__image img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .product__content h2 {
+      font-family: 'Playfair Display SC', serif;
+      font-size: 2.8rem;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .product__content p {
+      color: #b0b0b0;
+      font-size: 1.1rem;
+      line-height: 1.8;
+      margin-bottom: 28px;
+    }
+
+    .product__list {
+      list-style: none;
+      margin-bottom: 36px;
+    }
+
+    .product__list li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 0;
+      font-size: 1.05rem;
+      color: #d0d0d0;
+    }
+
+    .product__list li svg {
+      color: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    .product__price {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--primary-light);
+      margin-bottom: 8px;
+      font-family: 'Playfair Display SC', serif;
+    }
+
+    .product__price small {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #888;
+      text-decoration: line-through;
+      margin-left: 12px;
+    }
+
+    .product__promo {
+      color: #4caf50;
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 28px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* ---------- FAQ ---------- */
+    .faq__grid {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .faq__item {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 24px 0;
+      cursor: pointer;
+    }
+
+    .faq__question {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.2rem;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+
+    .faq__question:hover {
+      color: var(--primary-light);
+    }
+
+    .faq__icon {
+      transition: transform 0.3s ease;
+      color: var(--primary-light);
+      flex-shrink: 0;
+    }
+
+    .faq__item.open .faq__icon {
+      transform: rotate(180deg);
+    }
+
+    .faq__answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease, padding 0.3s ease;
+      color: #a8a8a8;
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .faq__item.open .faq__answer {
+      max-height: 300px;
+      padding-top: 16px;
+    }
+
+    /* ---------- FOOTER ---------- */
+    .footer {
+      background: #080808;
+      padding: 80px 0 40px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .footer__grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr;
+      gap: 40px;
+      margin-bottom: 60px;
+    }
+
+    .footer__brand p {
+      color: #888;
+      margin-top: 16px;
+      max-width: 280px;
+      line-height: 1.7;
+    }
+
+    .footer__col h4 {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: var(--primary-light);
+    }
+
+    .footer__col a {
+      display: block;
+      color: #999;
+      text-decoration: none;
+      padding: 6px 0;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+
+    .footer__col a:hover {
+      color: var(--primary-light);
+    }
+
+    .footer__bottom {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      padding-top: 32px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    /* ---------- BACK TO TOP (from original) ---------- */
+    #backToTopBtn {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 48px;
+      height: 48px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background: #967e2d;
+      color: #fff;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px) scale(1);
+      transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background 0.2s ease, box-shadow 0.25s ease;
+      z-index: 9999;
+    }
+
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 1024px) {
+      .hero__title { font-size: 3rem; }
+      .features__grid { grid-template-columns: 1fr 1fr; }
+      .product__wrapper { grid-template-columns: 1fr; gap: 40px; }
+      .footer__grid { grid-template-columns: 1fr 1fr; }
+      .section-title { font-size: 2.2rem; }
+    }
+
+    @media (max-width: 768px) {
+      .hero__title { font-size: 2.4rem; }
+      .hero__subtitle { font-size: 1.1rem; }
+      .features__grid { grid-template-columns: 1fr; }
+      .stats__grid { grid-template-columns: 1fr; gap: 24px; }
+      .stat__number { font-size: 2.8rem; }
+      .footer__grid { grid-template-columns: 1fr; }
+      .section { padding: 60px 0; }
+      .logos__track { gap: 32px; }
+      .logos__track img { height: 28px; }
+    }
+
+    @media (max-width: 480px) {
+      .hero__actions { flex-direction: column; align-items: center; }
+      .btn { width: 100%; padding: 16px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVBAR (exact as provided) ========== -->
+  <header class="navbar">
+    <div class="navbar__inner">
+      <a href="https://shop.tarjeta-digial.site" class="navbar__logo" aria-label="Ir al inicio">
+        <img src="https://bucket.mlcdn.com/a/3336/3336910/images/5b58761ff3286e26799633e5dc207fd3510cd8fc.png" alt="Logo">
+      </a>
+      <button class="navbar__toggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="main-nav">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="navbar__nav" id="main-nav">
+        <a href="https://shop.tarjeta-digial.site">Inicio</a>
+        <div class="navbar__dropdown">
+          <a href="https://shop.tarjeta-digial.site/servicios" class="navbar__dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+            Servicios
+            <svg class="navbar__chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <ul class="navbar__submenu">
+            <li class="navbar__submenu-links">
+              <a href="https://shop.tarjeta-digial.site/servicios/qr-dinamico" data-preview="https://your-image-url.com/qr-dinamico.jpg">Código QR dinámico</a>
+              <a href="https://shop.tarjeta-digial.site/servicios/modificacion-tarjeta" data-preview="https://your-image-url.com/modificacion.jpg">Modificación de Tarjeta</a>
+              <a href="https://shop.tarjeta-digial.site/servicios/traduccion-perfil" data-preview="https://your-image-url.com/traduccion.jpg">Traducción de Perfil</a>
+              <a href="https://shop.tarjeta-digial.site/servicios/reprogramacion-tarjeta" data-preview="https://your-image-url.com/reprogramacion.jpg">Reprogramación de Tarjeta</a>
+            </li>
+            <li class="navbar__submenu-preview">
+              <img src="https://your-image-url.com/default-servicios.jpg" alt="Vista previa del servicio" data-default="https://your-image-url.com/default-servicios.jpg">
+            </li>
+          </ul>
+        </div>
+        <div class="navbar__dropdown">
+          <a href="https://shop.tarjeta-digial.site/catalogo" class="navbar__dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+            Catálogo
+            <svg class="navbar__chevron" width="10" height="10" viewBox="0 0 10 10" aria-hidden="true">
+              <path d="M1 3l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+          <ul class="navbar__submenu">
+            <li class="navbar__submenu-links">
+              <a href="https://shop.tarjeta-digial.site/catalogo/tarjetas-digitales" data-preview="https://your-image-url.com/catalogo-tarjetas.jpg">Tarjetas Digitales</a>
+              <a href="https://shop.tarjeta-digial.site/catalogo/placas-qr" data-preview="https://your-image-url.com/catalogo-placas.jpg">Placas QR</a>
+              <a href="https://shop.tarjeta-digial.site/catalogo/llaveros" data-preview="https://your-image-url.com/catalogo-llaveros.jpg">Llaveros NFC</a>
+              <a href="https://shop.tarjeta-digial.site/catalogo/stickers" data-preview="https://your-image-url.com/catalogo-stickers.jpg">Stickers QR</a>
+            </li>
+            <li class="navbar__submenu-preview">
+              <img src="https://your-image-url.com/default-catalogo.jpg" alt="Vista previa del catálogo" data-default="https://your-image-url.com/default-catalogo.jpg">
+            </li>
+          </ul>
+        </div>
+        <a href="https://shop.tarjeta-digial.site/testimonios">Testimonios</a>
+        <a href="https://shop.tarjeta-digial.site/ayuda">Centro de Ayuda</a>
+        <a href="https://shop.tarjeta-digial.site/recursos">Recursos</a>
+        <a href="https://your-translation-page-url.com" class="navbar__translate" aria-label="Cambiar idioma" title="Cambiar idioma">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M3 12h18"/>
+            <path d="M12 3a15 15 0 0 1 0 18a15 15 0 0 1 0-18z"/>
+          </svg>
+        </a>
+        <a href="https://wa.me/18493523970" class="navbar__cta">Soporte Online</a>
+      </nav>
+    </div>
+  </header>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <!-- ========== HERO ========== -->
+  <section class="hero section">
+    <div class="container">
+      <div class="hero__content reveal">
+        <span class="hero__badge">Black Friday · Limited Time</span>
+        <h1 class="hero__title">NFC Contact Cards for <span class="text-gradient">Real Estate Brokers</span></h1>
+        <p class="hero__subtitle">Close more deals with a single tap. Share your listings, contact info, and booking calendar instantly. No app required.</p>
+        <div class="hero__actions">
+          <a href="#product" class="btn btn-primary">Claim Black Friday Deal →</a>
+          <a href="#features" class="btn btn-secondary">See How It Works</a>
+        </div>
+        <div class="hero__promo">
+          <span class="dot"></span> Promo ends Monday · Limited stock
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS COUNTER ========== -->
+  <section class="stats">
+    <div class="container">
+      <div class="stats__grid">
+        <div class="stat reveal">
+          <div class="stat__number" data-target="12400">0</div>
+          <div class="stat__label">Cards Activated</div>
+        </div>
+        <div class="stat reveal reveal-delay-1">
+          <div class="stat__number" data-target="98">0</div>
+          <div class="stat__label">% Client Satisfaction</div>
+        </div>
+        <div class="stat reveal reveal-delay-2">
+          <div class="stat__number" data-target="47">0</div>
+          <div class="stat__label">% More Leads Captured</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 3 FEATURE BLOCKS ========== -->
+  <section class="features section" id="features">
+    <div class="container">
+      <h2 class="section-title reveal" style="text-align:center;">Why Top Brokers Choose <span class="text-gradient">NFC Contact Cards</span></h2>
+      <p class="section-subtitle reveal reveal-delay-1">Instant networking, smarter lead capture, and a professional edge that closes deals faster.</p>
+      <div class="features__grid">
+        <div class="feature-card reveal">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3>Tap to Share</h3>
+          <p>One tap sends your contact, listings, and calendar to any smartphone. No app, no typing, no friction — just instant connection.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-1">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </div>
+          <h3>Smart Lead Capture</h3>
+          <p>Built-in lead capture forms and CRM sync options turn every handshake into a trackable opportunity. Never lose a contact again.</p>
+        </div>
+        <div class="feature-card reveal reveal-delay-2">
+          <div class="feature-card__icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+          </div>
+          <h3>Always Up-to-Date</h3>
+          <p>Update your profile, listings, or branding in real time. Your NFC card always reflects your latest info — no reprinting needed.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- ========== INFINITE LOGO SLIDER ========== -->
+  <section class="logos">
+    <div class="container">
+    <h2 class="section-title reveal" style="text-align:center;">Join other Real Estate <span class="text-gradient">Agents & Agencies</span> who have acquired their NFC Contact Cards</h2>
+    
+      <div class="logos__track">
+        <!-- duplicate set for seamless loop -->
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Remax_logo.svg/2560px-Remax_logo.svg.png" alt="RE/MAX">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Keller_Williams_Realty_logo.svg/2560px-Keller_Williams_Realty_logo.svg.png" alt="Keller Williams">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Coldwell_Banker_logo.svg/2560px-Coldwell_Banker_logo.svg.png" alt="Coldwell Banker">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Berkshire_Hathaway_HomeServices_logo.svg/2560px-Berkshire_Hathaway_HomeServices_logo.svg.png" alt="Berkshire Hathaway">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Remax_logo.svg/2560px-Remax_logo.svg.png" alt="RE/MAX">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Keller_Williams_Realty_logo.svg/2560px-Keller_Williams_Realty_logo.svg.png" alt="Keller Williams">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Coldwell_Banker_logo.svg/2560px-Coldwell_Banker_logo.svg.png" alt="Coldwell Banker">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3d/Berkshire_Hathaway_HomeServices_logo.svg/2560px-Berkshire_Hathaway_HomeServices_logo.svg.png" alt="Berkshire Hathaway">
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+
+  <!-- ========== PRODUCT BLOCK ========== -->
+  <section class="product section" id="product">
+    <div class="container">
+      <div class="product__wrapper">
+        <div class="product__image reveal">
+          <!-- Real estate broker NFC card mockup -->
+          <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=800&q=80" alt="NFC Contact Card for Real Estate Brokers" style="object-fit: cover; aspect-ratio: 4/3;">
+        </div>
+        <div class="product__content reveal reveal-delay-1">
+          <h2>Premium NFC Card <br><span class="text-gradient">Black Friday Bundle</span></h2>
+          <p>Designed for real estate professionals who want to stand out. Each card is laser-engraved, waterproof, and pre-loaded with your digital profile.</p>
+          <ul class="product__list">
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Custom branding & logo engraving</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Unlimited taps, no app required</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Dynamic profile — update anytime</li>
+            <li><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Lead capture & analytics dashboard</li>
+          </ul>
+          <div class="product__price">
+            $49 <small>$89</small>
+          </div>
+          <div class="product__promo">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4caf50" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Black Friday special · Ends Monday
+          </div>
+          <a href="https://wa.me/18493523970" class="btn btn-primary">Order Now →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <!-- ========== FAQ ========== -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <h2 class="section-title reveal" style="text-align:center;">Frequently Asked Questions</h2>
+      <p class="section-subtitle reveal reveal-delay-1">Everything you need to know before tapping into smarter networking.</p>
+      <div class="faq__grid">
+        <div class="faq__item reveal">
+          <div class="faq__question">
+            How does the NFC card work?
+            <svg class="faq__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq__answer">Simply hold the card near any NFC-enabled smartphone. A notification appears, and with one tap, your digital profile opens — no app needed. Works with iPhone and Android.</div>
+        </div>
+        <div class="faq__item reveal">
+          <div class="faq__question">
+            Can I update my information later?
+            <svg class="faq__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq__answer">Absolutely. Your card links to a dynamic profile that you can update anytime from our dashboard. Change your phone number, listings, or add new links — the card always stays current.</div>
+        </div>
+        <div class="faq__item reveal">
+          <div class="faq__question">
+            Is the Black Friday discount available for bulk orders?
+            <svg class="faq__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq__answer">Yes! The Black Friday pricing applies to all orders placed before Monday, including bulk orders for teams. Contact us on WhatsApp for team pricing.</div>
+        </div>
+        <div class="faq__item reveal">
+          <div class="faq__question">
+            Do you offer custom branding for real estate teams?
+            <svg class="faq__icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+          </div>
+          <div class="faq__answer">Definitely. We offer full white-label options, including custom card design, team dashboards, and branded onboarding. Reach out via our support line to discuss your team’s needs.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__brand">
+          <img src="https://bucket.mlcdn.com/a/3336/3336910/images/5b58761ff3286e26799633e5dc207fd3510cd8fc.png" alt="Logo" width="200">
+          <p>Empowering real estate professionals with smart, tap-to-share contact cards.</p>
+        </div>
+        <div class="footer__col">
+          <h4>Product</h4>
+          <a href="#">NFC Cards</a>
+          <a href="#">Digital Profiles</a>
+          <a href="#">Pricing</a>
+          <a href="#">For Teams</a>
+        </div>
+        <div class="footer__col">
+          <h4>Resources</h4>
+          <a href="#">Help Center</a>
+          <a href="#">Setup Guide</a>
+          <a href="#">Blog</a>
+          <a href="#">API</a>
+        </div>
+        <div class="footer__col">
+          <h4>Company</h4>
+          <a href="#">About</a>
+          <a href="#">Contact</a>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© 2025 NFC Technology. All rights reserved.</span>
+        <span>Black Friday promo ends Monday.</span>
+      </div>
+    </div>
+  </footer>
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- ========== SCRIPTS ========== -->
+  <script>
+    // ---------- Navbar toggle & dropdown (exact from original) ----------
+    const toggle = document.querySelector('.navbar__toggle');
+    const nav = document.querySelector('.navbar__nav');
+
+    toggle.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('is-open');
+      toggle.classList.toggle('is-open', isOpen);
+      toggle.setAttribute('aria-expanded', isOpen);
+      toggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+    });
+
+    const dropdowns = document.querySelectorAll('.navbar__dropdown');
+    dropdowns.forEach(dropdown => {
+      const ddToggle = dropdown.querySelector('.navbar__dropdown-toggle');
+      ddToggle.addEventListener('click', (e) => {
+        if (window.matchMedia('(max-width: 1150px)').matches) {
+          e.preventDefault();
+          const open = dropdown.classList.toggle('is-open');
+          ddToggle.setAttribute('aria-expanded', open);
+        }
+      });
+    });
+
+    document.querySelectorAll('.navbar__dropdown').forEach(dropdown => {
+      const submenu = dropdown.querySelector('.navbar__submenu');
+      const previewImg = dropdown.querySelector('.navbar__submenu-preview img');
+      const submenuLinks = dropdown.querySelectorAll('.navbar__submenu-links a');
+      if (!submenu || !previewImg) return;
+      const defaultSrc = previewImg.dataset.default || previewImg.getAttribute('src');
+      submenuLinks.forEach(link => {
+        link.addEventListener('mouseenter', () => {
+          if (window.matchMedia('(max-width: 1150px)').matches) return;
+          const src = link.dataset.preview;
+          if (src && previewImg.getAttribute('src') !== src) {
+            previewImg.src = src;
+          }
+        });
+      });
+      submenu.addEventListener('mouseleave', () => {
+        if (previewImg.getAttribute('src') !== defaultSrc) {
+          previewImg.src = defaultSrc;
+        }
+      });
+    });
+
+    // ---------- Back to top button ----------
+    (function () {
+      const btn = document.createElement('button');
+      btn.id = 'backToTopBtn';
+      btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+      btn.setAttribute('aria-label', 'Back to top');
+      btn.title = 'Back to top';
+      document.body.appendChild(btn);
+
+      const BASE_COLOR = '#967e2d';
+      const HOVER_COLOR = '#ab9239';
+
+      Object.assign(btn.style, {
+        position: 'fixed', bottom: '24px', right: '24px', width: '48px', height: '48px',
+        padding: '0', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        borderRadius: '50%', border: 'none', background: BASE_COLOR, color: '#fff',
+        cursor: 'pointer', boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+        opacity: '0', visibility: 'hidden', transform: 'translateY(10px) scale(1)',
+        transition: 'opacity 0.25s ease, transform 0.25s ease, visibility 0.25s, background 0.2s ease, box-shadow 0.25s ease',
+        zIndex: '9999'
+      });
+
+      const svg = btn.querySelector('svg');
+      svg.style.transition = 'transform 0.2s ease';
+
+      btn.addEventListener('mouseenter', () => {
+        btn.style.background = HOVER_COLOR;
+        btn.style.boxShadow = '0 8px 20px rgba(150,126,45,0.45)';
+        svg.style.transform = 'translateY(-2px)';
+      });
+      btn.addEventListener('mouseleave', () => {
+        btn.style.background = BASE_COLOR;
+        btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+        svg.style.transform = 'translateY(0)';
+      });
+      btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+
+      const toggleVisibility = () => {
+        if (window.scrollY > 300) {
+          btn.dataset.visible = 'true';
+          btn.style.opacity = '1';
+          btn.style.visibility = 'visible';
+          btn.style.transform = 'translateY(0) scale(1)';
+        } else {
+          btn.dataset.visible = 'false';
+          btn.style.opacity = '0';
+          btn.style.visibility = 'hidden';
+          btn.style.transform = 'translateY(10px) scale(1)';
+        }
+      };
+      window.addEventListener('scroll', toggleVisibility, { passive: true });
+      toggleVisibility();
+    })();
+
+    // ---------- Scroll reveal animations ----------
+    const revealElements = document.querySelectorAll('.reveal');
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+    revealElements.forEach(el => revealObserver.observe(el));
+
+    // ---------- Stats counter animation ----------
+    const statNumbers = document.querySelectorAll('.stat__number');
+    const statsObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const el = entry.target;
+          const target = parseInt(el.dataset.target, 10);
+          const duration = 2000;
+          const start = performance.now();
+          const startVal = 0;
+
+          function update(now) {
+            const elapsed = now - start;
+            const progress = Math.min(elapsed / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
+            const current = Math.floor(eased * target);
+            el.textContent = current.toLocaleString();
+            if (progress < 1) {
+              requestAnimationFrame(update);
+            } else {
+              el.textContent = target.toLocaleString();
+            }
+          }
+          requestAnimationFrame(update);
+          statsObserver.unobserve(el);
+        }
+      });
+    }, { threshold: 0.5 });
+    statNumbers.forEach(el => statsObserver.observe(el));
+
+    // ---------- FAQ accordion ----------
+    document.querySelectorAll('.faq__item').forEach(item => {
+      item.addEventListener('click', () => {
+        const isOpen = item.classList.contains('open');
+        // close all in the same grid
+        item.closest('.faq__grid').querySelectorAll('.faq__item').forEach(i => i.classList.remove('open'));
+        if (!isOpen) item.classList.add('open');
+      });
+    });
+  </script>
+</body>
+</html>
