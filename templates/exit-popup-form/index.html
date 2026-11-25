@@ -987,56 +987,70 @@
     }
 
     /* =========================================================
-       2. EXIT-INTENT MODAL CONTROLLER (no preview button)
-       ========================================================= */
-    const modalOverlay = document.getElementById('exitModalOverlay');
-    const modalCloseBtn = document.getElementById('exitModalClose');
-    const STORAGE_KEY = 'exit_intent_modal_shown';
+   2. EXIT-INTENT MODAL CONTROLLER
+   ========================================================= */
+const modalOverlay = document.getElementById('exitModalOverlay');
+const modalCloseBtn = document.getElementById('exitModalClose');
+const STORAGE_KEY = 'exit_intent_modal_shown';
 
-    function openExitModal() {
-      modalOverlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
+// Safe sessionStorage helpers (prevents crashes in sandboxed iframes/previews)
+function hasShownModal() {
+  try {
+    return sessionStorage.getItem(STORAGE_KEY) === '1';
+  } catch (e) {
+    return false;
+  }
+}
 
-    function closeExitModal() {
-      modalOverlay.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
+function markModalShown() {
+  try {
+    sessionStorage.setItem(STORAGE_KEY, '1');
+  } catch (e) {
+    // Ignore storage errors in restricted environments
+  }
+}
 
-    // Close via X button, backdrop click, or Escape key
-    modalCloseBtn.addEventListener('click', closeExitModal);
+function openExitModal() {
+  modalOverlay.classList.add('is-open');
+  document.body.style.overflow = 'hidden';
+}
 
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) closeExitModal();
-    });
+function closeExitModal() {
+  modalOverlay.classList.remove('is-open');
+  document.body.style.overflow = '';
+}
 
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
-        closeExitModal();
-      }
-    });
+modalCloseBtn.addEventListener('click', closeExitModal);
 
-    // Exit-Intent Detection (triggers once per browser session when cursor exits top viewport)
-    let exitIntentArmed = false;
+modalOverlay.addEventListener('click', (e) => {
+  if (e.target === modalOverlay) closeExitModal();
+});
 
-    // Arm after 1.5s so accidental cursor placement on initial page load doesn't misfire
-    setTimeout(() => {
-      exitIntentArmed = true;
-    }, 1500);
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+    closeExitModal();
+  }
+});
 
-    document.addEventListener('mouseout', (e) => {
-      if (!exitIntentArmed) return;
-      if (sessionStorage.getItem(STORAGE_KEY)) return;
-      if (modalOverlay.classList.contains('is-open')) return;
+let exitIntentArmed = false;
+let shownInPage = false;
 
-      // Detect cursor leaving through the top edge of the browser window
-      const leftViewport = !e.relatedTarget && !e.toElement;
-      if (leftViewport && e.clientY <= 10) {
-        sessionStorage.setItem(STORAGE_KEY, '1');
-        openExitModal();
-      }
-    });
+setTimeout(() => {
+  exitIntentArmed = true;
+}, 1500);
 
+// Use mouseleave on documentElement for reliable top-edge exit detection
+document.documentElement.addEventListener('mouseleave', (e) => {
+  if (!exitIntentArmed || shownInPage || hasShownModal()) return;
+  if (modalOverlay.classList.contains('is-open')) return;
+
+  // Trigger when cursor exits through the top of the viewport (generous threshold for fast mouse moves)
+  if (e.clientY <= 40) {
+    shownInPage = true;
+    markModalShown();
+    openExitModal();
+  }
+});
     /* =========================================================
        3. INTERACTIVE 3D FANNED CARD STACK
        ========================================================= */
