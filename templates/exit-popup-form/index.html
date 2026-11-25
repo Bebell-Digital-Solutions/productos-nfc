@@ -988,96 +988,112 @@ var ml_account = ml('accounts', '3336910', 't8p6n6m7b3', 'load');
   <script src="https://www.google.com/recaptcha/api.js" async defer></script>
   <script src="https://static.mailerlite.com/js/w/webforms.min.js?v646e2239910df1d4eb4ad82bb64fbfdc" type="text/javascript"></script>
 
+
+
+
+
+
+
   <script>
-    /* =========================================================
-       1. MAILERLITE SUCCESS CALLBACK
-       ========================================================= */
-    function ml_webform_success_6141456() {
-      var r = window.ml_jQuery || window.jQuery;
-      if (r) {
-        r('.ml-subscribe-form-6141456 .row-success').show();
-        r('.ml-subscribe-form-6141456 .row-form').hide();
-      } else {
-        document.querySelector('.ml-subscribe-form-6141456 .row-success').style.display = 'block';
-        document.querySelector('.ml-subscribe-form-6141456 .row-form').style.display = 'none';
+  /* =========================================================
+     1. MAILERLITE SUCCESS CALLBACK
+     ========================================================= */
+  function ml_webform_success_6141456() {
+    var r = window.ml_jQuery || window.jQuery;
+    if (r) {
+      r('.ml-subscribe-form-6141456 .row-success').show();
+      r('.ml-subscribe-form-6141456 .row-form').hide();
+    } else {
+      document.querySelector('.ml-subscribe-form-6141456 .row-success').style.display = 'block';
+      document.querySelector('.ml-subscribe-form-6141456 .row-form').style.display = 'none';
+    }
+  }
+
+  /* =========================================================
+     2. EXIT-INTENT MODAL CONTROLLER (Triggers from ANY edge)
+     ========================================================= */
+  (function () {
+    const modalOverlay = document.getElementById('exitModalOverlay');
+    const modalCloseBtn = document.getElementById('exitModalClose');
+    const STORAGE_KEY = 'exit_intent_modal_shown';
+
+    // Set to false when you go live so it only shows once per session
+    const TEST_MODE = true;
+
+    if (!modalOverlay || !modalCloseBtn) return;
+
+    function hasShownModal() {
+      if (TEST_MODE) return false;
+      try {
+        return sessionStorage.getItem(STORAGE_KEY) === '1';
+      } catch (e) {
+        return false;
       }
     }
 
-    /* =========================================================
-   2. EXIT-INTENT MODAL CONTROLLER
-   ========================================================= */
-const modalOverlay = document.getElementById('exitModalOverlay');
-const modalCloseBtn = document.getElementById('exitModalClose');
-const STORAGE_KEY = 'exit_intent_modal_shown';
+    function markModalShown() {
+      if (TEST_MODE) return;
+      try {
+        sessionStorage.setItem(STORAGE_KEY, '1');
+      } catch (e) {}
+    }
 
-// Safe sessionStorage helpers (prevents crashes in sandboxed iframes/previews)
-function hasShownModal() {
-  try {
-    return sessionStorage.getItem(STORAGE_KEY) === '1';
-  } catch (e) {
-    return false;
-  }
-}
+    function openExitModal() {
+      if (modalOverlay.classList.contains('is-open')) return;
+      modalOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
+      markModalShown();
+    }
 
-function markModalShown() {
-  try {
-    sessionStorage.setItem(STORAGE_KEY, '1');
-  } catch (e) {
-    // Ignore storage errors in restricted environments
-  }
-}
+    function closeExitModal() {
+      modalOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
 
-function openExitModal() {
-  modalOverlay.classList.add('is-open');
-  document.body.style.overflow = 'hidden';
-}
+    modalCloseBtn.addEventListener('click', closeExitModal);
 
-function closeExitModal() {
-  modalOverlay.classList.remove('is-open');
-  document.body.style.overflow = '';
-}
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeExitModal();
+    });
 
-modalCloseBtn.addEventListener('click', closeExitModal);
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+        closeExitModal();
+      }
+    });
 
-modalOverlay.addEventListener('click', (e) => {
-  if (e.target === modalOverlay) closeExitModal();
-});
+    let exitIntentArmed = false;
+    setTimeout(() => {
+      exitIntentArmed = true;
+    }, 1000);
 
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
-    closeExitModal();
-  }
-});
+    function handleExit() {
+      if (!exitIntentArmed || hasShownModal()) return;
+      if (modalOverlay.classList.contains('is-open')) return;
+      openExitModal();
+    }
 
-let exitIntentArmed = false;
-let shownInPage = false;
+    document.documentElement.addEventListener('mouseleave', handleExit);
+    document.addEventListener('mouseout', (e) => {
+      if (!e.relatedTarget && !e.toElement) {
+        handleExit();
+      }
+    });
+  })();
 
-setTimeout(() => {
-  exitIntentArmed = true;
-}, 1500);
-
-// Use mouseleave on documentElement for reliable top-edge exit detection
-document.documentElement.addEventListener('mouseleave', (e) => {
-  if (!exitIntentArmed || shownInPage || hasShownModal()) return;
-  if (modalOverlay.classList.contains('is-open')) return;
-
-  // Trigger when cursor exits through the top of the viewport (generous threshold for fast mouse moves)
-  if (e.clientY <= 40) {
-    shownInPage = true;
-    markModalShown();
-    openExitModal();
-  }
-});
-    /* =========================================================
-       3. INTERACTIVE 3D FANNED CARD STACK
-       ========================================================= */
+  /* =========================================================
+     3. INTERACTIVE 3D FANNED CARD STACK
+     ========================================================= */
+  (function () {
     const stage = document.getElementById('cardStage');
     const stack = document.getElementById('cardStack');
     const leftCard = document.querySelector('[data-card="left"]');
     const centerCard = document.querySelector('[data-card="center"]');
     const rightCard = document.querySelector('[data-card="right"]');
-    const allCards = [leftCard, centerCard, rightCard];
 
+    if (!stage || !stack || !leftCard || !centerCard || !rightCard) return;
+
+    const allCards = [leftCard, centerCard, rightCard];
     const target = { x: 0, y: 0, active: 0 };
     const current = { x: 0, y: 0, active: 0 };
     const lerp = (start, end, factor) => start + (end - start) * factor;
@@ -1117,19 +1133,16 @@ document.documentElement.addEventListener('mouseleave', (e) => {
 
       const spread = current.active * 14;
 
-      // Left card
       const leftX = -58 - spread + current.x * -10;
       const leftY = 12 + current.y * -6;
       const leftRot = -15 - current.active * 3 + current.x * 2.5;
       leftCard.style.transform = `translate3d(${leftX}px, ${leftY}px, -36px) rotate(${leftRot}deg)`;
 
-      // Right card
       const rightX = 58 + spread + current.x * -10;
       const rightY = 12 + current.y * -6;
       const rightRot = 15 + current.active * 3 + current.x * 2.5;
       rightCard.style.transform = `translate3d(${rightX}px, ${rightY}px, -36px) rotate(${rightRot}deg)`;
 
-      // Center card
       const centerX = current.x * 8;
       const centerY = current.y * 6;
       const centerZ = 18 + current.active * 10;
@@ -1139,6 +1152,7 @@ document.documentElement.addEventListener('mouseleave', (e) => {
     }
 
     animateCards();
-  </script>
+  })();
+</script>
 </body>
 </html>
