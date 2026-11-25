@@ -965,7 +965,7 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
 
 
 
-   /* =========================================================
+    /* =========================================================
        EXIT-INTENT POPUP MODAL OVERLAY & SHELL
        ========================================================= */
     .exit-modal-overlay {
@@ -1054,7 +1054,6 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
       min-height: 540px;
     }
 
-    /* Subtle top edge highlight */
     .exit-modal-left::before {
       content: "";
       position: absolute;
@@ -1069,7 +1068,7 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
     }
 
     .eyebrow-pill {
-    gap: 5px;
+      gap: 5px;
       display: inline-flex;
       align-items: center;
       padding: 6px 14px;
@@ -1475,10 +1474,6 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
         transform-origin: 0 0;
       }
     }
-
-
-
-
 
 
   
@@ -2570,7 +2565,7 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
 
 
 
- <!-- =========================================================
+  <!-- =========================================================
        EXIT-INTENT POPUP MODAL
        ========================================================= -->
   <div class="exit-modal-overlay" id="exitModalOverlay" role="dialog" aria-modal="true" aria-labelledby="exitModalTitle">
@@ -2584,27 +2579,25 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
         </svg>
       </button>
       
-      
-
       <!-- LEFT SIDE: BLACK BACKGROUND + INTERACTIVE 3D CARDS -->
       <div class="exit-modal-left">
         <div class="left-header">
           <span class="eyebrow-pill">
-      <img
-        src="https://bucket.mlcdn.com/a/3336/3336910/images/d577c668de71834ffb177ae13891eae7f182635a.png"
-        alt="Bebell"
-        class="eyebrow-logo"
-        width="20"
-        height="20"
-      /> 
-          NFC Technology</span>
+            <img
+              src="https://bucket.mlcdn.com/a/3336/3336910/images/d577c668de71834ffb177ae13891eae7f182635a.png"
+              alt="Bebell"
+              class="eyebrow-logo"
+              width="20"
+              height="20"
+            /> 
+            NFC Technology
+          </span>
           
           <h2 class="left-title" id="exitModalTitle">Una Tarjeta de Contacto con uso ilimitado</h2>
         </div>
 
         <div class="card-stage" id="cardStage">
           <div class="card-stack" id="cardStack">
-
             <!-- Left Back Card -->
             <div class="card card--left" data-card="left">
               <img src="https://ik.imagekit.io/bebell/NFC%20Technology/Tarjetas%20Personalizadas/Bambu.png?auto=format&fit=crop&w=800&q=80" alt="Card Visual 1" />
@@ -2612,8 +2605,6 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
               <div class="card-label"></div>
             </div>
             
-            
-
             <!-- Right Back Card -->
             <div class="card card--right" data-card="right">
               <img src="https://ik.imagekit.io/bebell/NFC%20Technology/Tarjetas%20Personalizadas/PVC.png?auto=format&fit=crop&w=800&q=80" alt="Card Visual 2" />
@@ -2621,18 +2612,14 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
               <div class="card-label"></div>
             </div>
             
-            
-
             <!-- Center Front Card -->
             <div class="card card--center" data-card="center">
               <img src="https://ik.imagekit.io/bebell/NFC%20Technology/Tarjetas%20Personalizadas/Metal.png?auto=format&fit=crop&w=800&q=80" alt="Card Visual 3" />
               <div class="card-glare"></div>
               <div class="card-label"></div>
             </div>
-
           </div>
         </div>
-        
 
         <div class="left-footer">
           <span>PVC</span>
@@ -2652,7 +2639,7 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
               <div class="ml-form-embedBody ml-form-embedBodyDefault row-form">
                 <div class="ml-form-embedContent">
                   <h4>Suscríbete a nuestro boletín</h4>
- <p>Recibe las últimas noticias directamente en tu correo.</p>
+                  <p>Recibe las últimas noticias directamente en tu correo.</p>
                 </div>
 
                 <form class="ml-block-form" action="https://static.mailerlite.com/webforms/submit/e8d2e2" data-code="e8d2e2" method="post" target="_blank">
@@ -3307,114 +3294,144 @@ document.getElementById('year').textContent = new Date().getFullYear();
 
 
 
-<script>
-  /* 1. MAILERLITE */
-  function ml_webform_success_6141456() { /* unchanged */ }
+  <script>
+    /* =========================================================
+       1. MAILERLITE SUCCESS CALLBACK
+       ========================================================= */
+    function ml_webform_success_6141456() {
+      var r = window.ml_jQuery || window.jQuery;
+      if (r) {
+        r('.ml-subscribe-form-6141456 .row-success').show();
+        r('.ml-subscribe-form-6141456 .row-form').hide();
+      } else {
+        document.querySelector('.ml-subscribe-form-6141456 .row-success').style.display = 'block';
+        document.querySelector('.ml-subscribe-form-6141456 .row-form').style.display = 'none';
+      }
+    }
 
-  document.addEventListener('DOMContentLoaded', () => {
-
-    /* 2. POPUP */
+    /* =========================================================
+       2. EXIT-INTENT MODAL CONTROLLER (no preview button)
+       ========================================================= */
     const modalOverlay = document.getElementById('exitModalOverlay');
     const modalCloseBtn = document.getElementById('exitModalClose');
+    const STORAGE_KEY = 'exit_intent_modal_shown';
 
-    if (modalOverlay && modalCloseBtn) {
-      const STORAGE_KEY = 'exit_intent_modal_shown';
-
-      function openExitModal() {
-        modalOverlay.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-      }
-      function closeExitModal() {
-        modalOverlay.classList.remove('is-open');
-        document.body.style.overflow = '';
-      }
-
-      modalCloseBtn.addEventListener('click', closeExitModal);
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) closeExitModal();
-      });
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) closeExitModal();
-      });
-
-      let armed = false;
-      setTimeout(() => { armed = true; }, 1500);
-
-      document.addEventListener('mouseleave', (e) => {   // ← use mouseleave, not mouseout
-        if (!armed) return;
-        if (sessionStorage.getItem(STORAGE_KEY)) return;
-        if (modalOverlay.classList.contains('is-open')) return;
-        if (e.clientY <= 0) {
-          sessionStorage.setItem(STORAGE_KEY, '1');
-          openExitModal();
-        }
-      });
-
-      // Mobile fallback
-      window.addEventListener('scroll', () => {
-        if (sessionStorage.getItem(STORAGE_KEY)) return;
-        const ratio = (window.scrollY + window.innerHeight) / document.documentElement.scrollHeight;
-        if (ratio > 0.6) {
-          sessionStorage.setItem(STORAGE_KEY, '1');
-          openExitModal();
-        }
-      }, { passive: true });
+    function openExitModal() {
+      modalOverlay.classList.add('is-open');
+      document.body.style.overflow = 'hidden';
     }
 
-    /* 3. 3D CARD STACK */
-    const stage   = document.getElementById('cardStage');
-    const stack   = document.getElementById('cardStack');
-    const left    = document.querySelector('[data-card="left"]');
-    const center  = document.querySelector('[data-card="center"]');
-    const right   = document.querySelector('[data-card="right"]');
-
-    if (stage && stack && left && center && right) {
-      const allCards = [left, center, right];
-      const target  = { x: 0, y: 0, active: 0 };
-      const current = { x: 0, y: 0, active: 0 };
-      const lerp = (s, e, f) => s + (e - s) * f;
-
-      stage.addEventListener('mousemove', (e) => {
-        const rect = stage.getBoundingClientRect();
-        target.x = Math.max(-1, Math.min(1, ((e.clientX - rect.left) / rect.width)  * 2 - 1));
-        target.y = Math.max(-1, Math.min(1, ((e.clientY - rect.top)  / rect.height) * 2 - 1));
-        target.active = 1;
-
-        allCards.forEach((card) => {
-          const r  = card.getBoundingClientRect();
-          card.style.setProperty('--glare-x', `${((e.clientX - r.left) / r.width)  * 100}%`);
-          card.style.setProperty('--glare-y', `${((e.clientY - r.top)  / r.height) * 100}%`);
-        });
-      });
-
-      stage.addEventListener('mouseleave', () => {
-        target.x = target.y = target.active = 0;
-      });
-
-      (function animateCards() {
-        current.x      = lerp(current.x,      target.x,      0.08);
-        current.y      = lerp(current.y,      target.y,      0.08);
-        current.active = lerp(current.active, target.active, 0.07);
-
-        stack.style.transform =
-          `rotateX(${-current.y * 9}deg) rotateY(${current.x * 11}deg)`;
-
-        const spread = current.active * 14;
-
-        left.style.transform =
-          `translate3d(${-58 - spread + current.x * -10}px, ${12 + current.y * -6}px, -36px) rotate(${-15 - current.active * 3 + current.x * 2.5}deg)`;
-
-        right.style.transform =
-          `translate3d(${58 + spread + current.x * -10}px, ${12 + current.y * -6}px, -36px) rotate(${15 + current.active * 3 + current.x * 2.5}deg)`;
-
-        center.style.transform =
-          `translate3d(${current.x * 8}px, ${current.y * 6}px, ${18 + current.active * 10}px)`;
-
-        requestAnimationFrame(animateCards);
-      })();
+    function closeExitModal() {
+      modalOverlay.classList.remove('is-open');
+      document.body.style.overflow = '';
     }
-  });
-</script>
+
+    // Close via X button, backdrop click, or Escape key
+    modalCloseBtn.addEventListener('click', closeExitModal);
+
+    modalOverlay.addEventListener('click', (e) => {
+      if (e.target === modalOverlay) closeExitModal();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+        closeExitModal();
+      }
+    });
+
+    // Exit-Intent Detection (triggers once per browser session when cursor exits top viewport)
+    let exitIntentArmed = false;
+
+    // Arm after 1.5s so accidental cursor placement on initial page load doesn't misfire
+    setTimeout(() => {
+      exitIntentArmed = true;
+    }, 1500);
+
+    document.addEventListener('mouseout', (e) => {
+      if (!exitIntentArmed) return;
+      if (sessionStorage.getItem(STORAGE_KEY)) return;
+      if (modalOverlay.classList.contains('is-open')) return;
+
+      // Detect cursor leaving through the top edge of the browser window
+      const leftViewport = !e.relatedTarget && !e.toElement;
+      if (leftViewport && e.clientY <= 10) {
+        sessionStorage.setItem(STORAGE_KEY, '1');
+        openExitModal();
+      }
+    });
+
+    /* =========================================================
+       3. INTERACTIVE 3D FANNED CARD STACK
+       ========================================================= */
+    const stage = document.getElementById('cardStage');
+    const stack = document.getElementById('cardStack');
+    const leftCard = document.querySelector('[data-card="left"]');
+    const centerCard = document.querySelector('[data-card="center"]');
+    const rightCard = document.querySelector('[data-card="right"]');
+    const allCards = [leftCard, centerCard, rightCard];
+
+    const target = { x: 0, y: 0, active: 0 };
+    const current = { x: 0, y: 0, active: 0 };
+    const lerp = (start, end, factor) => start + (end - start) * factor;
+
+    stage.addEventListener('mousemove', (e) => {
+      const rect = stage.getBoundingClientRect();
+      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+
+      target.x = Math.max(-1, Math.min(1, nx));
+      target.y = Math.max(-1, Math.min(1, ny));
+      target.active = 1;
+
+      allCards.forEach((card) => {
+        const cardRect = card.getBoundingClientRect();
+        const gx = ((e.clientX - cardRect.left) / cardRect.width) * 100;
+        const gy = ((e.clientY - cardRect.top) / cardRect.height) * 100;
+        card.style.setProperty('--glare-x', `${gx}%`);
+        card.style.setProperty('--glare-y', `${gy}%`);
+      });
+    });
+
+    stage.addEventListener('mouseleave', () => {
+      target.x = 0;
+      target.y = 0;
+      target.active = 0;
+    });
+
+    function animateCards() {
+      current.x = lerp(current.x, target.x, 0.08);
+      current.y = lerp(current.y, target.y, 0.08);
+      current.active = lerp(current.active, target.active, 0.07);
+
+      const stackRotateY = current.x * 11;
+      const stackRotateX = -current.y * 9;
+      stack.style.transform = `rotateX(${stackRotateX}deg) rotateY(${stackRotateY}deg)`;
+
+      const spread = current.active * 14;
+
+      // Left card
+      const leftX = -58 - spread + current.x * -10;
+      const leftY = 12 + current.y * -6;
+      const leftRot = -15 - current.active * 3 + current.x * 2.5;
+      leftCard.style.transform = `translate3d(${leftX}px, ${leftY}px, -36px) rotate(${leftRot}deg)`;
+
+      // Right card
+      const rightX = 58 + spread + current.x * -10;
+      const rightY = 12 + current.y * -6;
+      const rightRot = 15 + current.active * 3 + current.x * 2.5;
+      rightCard.style.transform = `translate3d(${rightX}px, ${rightY}px, -36px) rotate(${rightRot}deg)`;
+
+      // Center card
+      const centerX = current.x * 8;
+      const centerY = current.y * 6;
+      const centerZ = 18 + current.active * 10;
+      centerCard.style.transform = `translate3d(${centerX}px, ${centerY}px, ${centerZ}px)`;
+
+      requestAnimationFrame(animateCards);
+    }
+
+    animateCards();
+  </script>
 
 
   
