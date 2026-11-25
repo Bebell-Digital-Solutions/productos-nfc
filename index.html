@@ -2982,6 +2982,7 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
 <!-- =========================================================
      SCRIPTS
      ========================================================= -->
+
 <script>
 /* ---------------------------------------------------------
    A. NAVBAR — hamburguesa, acordeones y previews
@@ -3166,270 +3167,185 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
 
 
 /* ---------------------------------------------------------
-   E. FAQ ACORDEÓN
+   E. FAQ ACCORDION
    --------------------------------------------------------- */
 (function () {
-  const triggers = document.querySelectorAll('.faq-trigger');
+  document.querySelectorAll('.faq-item').forEach(item => {
+    const trigger = item.querySelector('.faq-trigger');
+    const panel   = item.querySelector('.faq-panel');
+    if (!trigger || !panel) return;
 
-  triggers.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const item  = btn.closest('.faq-item');
-      const panel = item.querySelector('.faq-panel');
-      const isOpen = item.classList.contains('is-open');
-
-      // Cerrar todos
-      document.querySelectorAll('.faq-item.is-open').forEach(openItem => {
-        openItem.classList.remove('is-open');
-        const p = openItem.querySelector('.faq-panel');
-        if (p) p.style.maxHeight = null;
-        const b = openItem.querySelector('.faq-trigger');
-        if (b) b.setAttribute('aria-expanded', 'false');
-      });
-
-      // Abrir el actual (si estaba cerrado)
-      if (!isOpen) {
-        item.classList.add('is-open');
-        panel.style.maxHeight = panel.scrollHeight + 'px';
-        btn.setAttribute('aria-expanded', 'true');
-      }
-    });
-  });
-
-  // Recalcular altura del panel abierto al redimensionar
-  window.addEventListener('resize', () => {
-    document.querySelectorAll('.faq-item.is-open .faq-panel').forEach(panel => {
-      panel.style.maxHeight = panel.scrollHeight + 'px';
+    trigger.addEventListener('click', () => {
+      const isOpen = item.classList.toggle('is-open');
+      trigger.setAttribute('aria-expanded', isOpen);
+      panel.style.maxHeight = isOpen ? panel.scrollHeight + 'px' : '0px';
     });
   });
 })();
 
 
 /* ---------------------------------------------------------
-   F. BOTÓN "VOLVER ARRIBA"
+   F. EXIT-INTENT POPUP MODAL CONTROLLER
    --------------------------------------------------------- */
 (function () {
-  const btn = document.createElement('button');
-  btn.id = 'backToTopBtn';
-  btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
-  btn.setAttribute('aria-label', 'Volver arriba');
-  btn.title = 'Volver arriba';
+  const modalOverlay = document.getElementById('exitModalOverlay');
+  const modalCloseBtn = document.getElementById('exitModalClose');
+  const STORAGE_KEY = 'exit_intent_modal_shown';
 
-  const BASE_COLOR  = '#967e2d';
-  const HOVER_COLOR = '#ab9239';
+  if (!modalOverlay || !modalCloseBtn) return;
 
-  Object.assign(btn.style, {
-    position: 'fixed',
-    bottom: '24px',
-    right: '24px',
-    width: '48px',
-    height: '48px',
-    padding: '0',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: '50%',
-    border: '1px solid rgba(255,255,255,.25)',
-    background: BASE_COLOR,
-    color: '#fff',
-    cursor: 'pointer',
-    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
-    opacity: '0',
-    visibility: 'hidden',
-    transform: 'translateY(10px) scale(1)',
-    transition: 'opacity .25s ease, transform .25s ease, visibility .25s, background .2s ease, box-shadow .25s ease',
-    zIndex: '9999'
+  function openExitModal() {
+    modalOverlay.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeExitModal() {
+    modalOverlay.classList.remove('is-open');
+    document.body.style.overflow = '';
+  }
+
+  // Close via X button, backdrop click, or Escape key
+  modalCloseBtn.addEventListener('click', closeExitModal);
+
+  modalOverlay.addEventListener('click', (e) => {
+    if (e.target === modalOverlay) closeExitModal();
   });
 
-  const svg = btn.querySelector('svg');
-  svg.style.transition = 'transform .2s ease';
-
-  btn.addEventListener('mouseenter', () => {
-    btn.style.background = HOVER_COLOR;
-    btn.style.boxShadow = '0 8px 20px rgba(150,126,45,.45)';
-    svg.style.transform = 'translateY(-2px)';
-  });
-
-  btn.addEventListener('mouseleave', () => {
-    btn.style.background = BASE_COLOR;
-    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
-    svg.style.transform = 'translateY(0)';
-  });
-
-  btn.addEventListener('click', () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  });
-
-  document.body.appendChild(btn);
-
-  const toggleVisibility = () => {
-    if (window.scrollY > 400) {
-      btn.style.opacity = '1';
-      btn.style.visibility = 'visible';
-      btn.style.transform = 'translateY(0) scale(1)';
-    } else {
-      btn.style.opacity = '0';
-      btn.style.visibility = 'hidden';
-      btn.style.transform = 'translateY(10px) scale(1)';
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
+      closeExitModal();
     }
-  };
+  });
 
-  window.addEventListener('scroll', toggleVisibility, { passive: true });
-  toggleVisibility();
+  // Exit-Intent Detection (triggers once per browser session when cursor exits top viewport)
+  let exitIntentArmed = false;
+
+  // Arm after 1.5s so accidental cursor placement on initial page load doesn't misfire
+  setTimeout(() => {
+    exitIntentArmed = true;
+  }, 1500);
+
+  document.addEventListener('mouseout', (e) => {
+    if (!exitIntentArmed) return;
+    if (sessionStorage.getItem(STORAGE_KEY)) return;
+    if (modalOverlay.classList.contains('is-open')) return;
+
+    // Detect cursor leaving through the top edge of the browser window
+    const leftViewport = !e.relatedTarget && !e.toElement;
+    if (leftViewport && e.clientY <= 10) {
+      sessionStorage.setItem(STORAGE_KEY, '1');
+      openExitModal();
+    }
+  });
 })();
 
 
 /* ---------------------------------------------------------
-   G. AÑO DINÁMICO EN EL FOOTER
+   G. MAILERLITE SUCCESS CALLBACK
    --------------------------------------------------------- */
-document.getElementById('year').textContent = new Date().getFullYear();
+function ml_webform_success_6141456() {
+  var r = window.ml_jQuery || window.jQuery;
+  if (r) {
+    r('.ml-subscribe-form-6141456 .row-success').show();
+    r('.ml-subscribe-form-6141456 .row-form').hide();
+  } else {
+    var successBody = document.querySelector('.ml-subscribe-form-6141456 .row-success');
+    var formBody = document.querySelector('.ml-subscribe-form-6141456 .row-form');
+    if (successBody) successBody.style.display = 'block';
+    if (formBody) formBody.style.display = 'none';
+  }
+}
+
+
+/* ---------------------------------------------------------
+   H. INTERACTIVE 3D FANNED CARD STACK (inside popup)
+   --------------------------------------------------------- */
+(function () {
+  const stage = document.getElementById('cardStage');
+  const stack = document.getElementById('cardStack');
+  if (!stage || !stack) return;
+
+  const leftCard = document.querySelector('[data-card="left"]');
+  const centerCard = document.querySelector('[data-card="center"]');
+  const rightCard = document.querySelector('[data-card="right"]');
+
+  if (!leftCard || !centerCard || !rightCard) return;
+
+  const allCards = [leftCard, centerCard, rightCard];
+
+  const target = { x: 0, y: 0, active: 0 };
+  const current = { x: 0, y: 0, active: 0 };
+  const lerp = (start, end, factor) => start + (end - start) * factor;
+
+  stage.addEventListener('mousemove', (e) => {
+    const rect = stage.getBoundingClientRect();
+    const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
+
+    target.x = Math.max(-1, Math.min(1, nx));
+    target.y = Math.max(-1, Math.min(1, ny));
+    target.active = 1;
+
+    allCards.forEach((card) => {
+      const cardRect = card.getBoundingClientRect();
+      const gx = ((e.clientX - cardRect.left) / cardRect.width) * 100;
+      const gy = ((e.clientY - cardRect.top) / cardRect.height) * 100;
+      card.style.setProperty('--glare-x', `${gx}%`);
+      card.style.setProperty('--glare-y', `${gy}%`);
+    });
+  });
+
+  stage.addEventListener('mouseleave', () => {
+    target.x = 0;
+    target.y = 0;
+    target.active = 0;
+  });
+
+  function animateCards() {
+    current.x = lerp(current.x, target.x, 0.08);
+    current.y = lerp(current.y, target.y, 0.08);
+    current.active = lerp(current.active, target.active, 0.07);
+
+    const stackRotateY = current.x * 11;
+    const stackRotateX = -current.y * 9;
+    stack.style.transform = `rotateX(${stackRotateX}deg) rotateY(${stackRotateY}deg)`;
+
+    const spread = current.active * 14;
+
+    // Left card
+    const leftX = -58 - spread + current.x * -10;
+    const leftY = 12 + current.y * -6;
+    const leftRot = -15 - current.active * 3 + current.x * 2.5;
+    leftCard.style.transform = `translate3d(${leftX}px, ${leftY}px, -36px) rotate(${leftRot}deg)`;
+
+    // Right card
+    const rightX = 58 + spread + current.x * -10;
+    const rightY = 12 + current.y * -6;
+    const rightRot = 15 + current.active * 3 + current.x * 2.5;
+    rightCard.style.transform = `translate3d(${rightX}px, ${rightY}px, -36px) rotate(${rightRot}deg)`;
+
+    // Center card
+    const centerX = current.x * 8;
+    const centerY = current.y * 6;
+    const centerZ = 18 + current.active * 10;
+    centerCard.style.transform = `translate3d(${centerX}px, ${centerY}px, ${centerZ}px)`;
+
+    requestAnimationFrame(animateCards);
+  }
+
+  animateCards();
+})();
+
+
+/* ---------------------------------------------------------
+   I. YEAR IN FOOTER
+   --------------------------------------------------------- */
+(function () {
+  const yearEl = document.getElementById('year');
+  if (yearEl) yearEl.textContent = new Date().getFullYear();
+})();
 </script>
-
-
-
-
-
-
-
-
-
-
-  <script>
-    /* =========================================================
-       1. MAILERLITE SUCCESS CALLBACK
-       ========================================================= */
-    function ml_webform_success_6141456() {
-      var r = window.ml_jQuery || window.jQuery;
-      if (r) {
-        r('.ml-subscribe-form-6141456 .row-success').show();
-        r('.ml-subscribe-form-6141456 .row-form').hide();
-      } else {
-        document.querySelector('.ml-subscribe-form-6141456 .row-success').style.display = 'block';
-        document.querySelector('.ml-subscribe-form-6141456 .row-form').style.display = 'none';
-      }
-    }
-
-    /* =========================================================
-       2. EXIT-INTENT MODAL CONTROLLER (no preview button)
-       ========================================================= */
-    const modalOverlay = document.getElementById('exitModalOverlay');
-    const modalCloseBtn = document.getElementById('exitModalClose');
-    const STORAGE_KEY = 'exit_intent_modal_shown';
-
-    function openExitModal() {
-      modalOverlay.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeExitModal() {
-      modalOverlay.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
-
-    // Close via X button, backdrop click, or Escape key
-    modalCloseBtn.addEventListener('click', closeExitModal);
-
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) closeExitModal();
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalOverlay.classList.contains('is-open')) {
-        closeExitModal();
-      }
-    });
-
-    // Exit-Intent Detection (triggers once per browser session when cursor exits top viewport)
-    let exitIntentArmed = false;
-
-    // Arm after 1.5s so accidental cursor placement on initial page load doesn't misfire
-    setTimeout(() => {
-      exitIntentArmed = true;
-    }, 1500);
-
-    document.addEventListener('mouseout', (e) => {
-      if (!exitIntentArmed) return;
-      if (sessionStorage.getItem(STORAGE_KEY)) return;
-      if (modalOverlay.classList.contains('is-open')) return;
-
-      // Detect cursor leaving through the top edge of the browser window
-      const leftViewport = !e.relatedTarget && !e.toElement;
-      if (leftViewport && e.clientY <= 10) {
-        sessionStorage.setItem(STORAGE_KEY, '1');
-        openExitModal();
-      }
-    });
-
-    /* =========================================================
-       3. INTERACTIVE 3D FANNED CARD STACK
-       ========================================================= */
-    const stage = document.getElementById('cardStage');
-    const stack = document.getElementById('cardStack');
-    const leftCard = document.querySelector('[data-card="left"]');
-    const centerCard = document.querySelector('[data-card="center"]');
-    const rightCard = document.querySelector('[data-card="right"]');
-    const allCards = [leftCard, centerCard, rightCard];
-
-    const target = { x: 0, y: 0, active: 0 };
-    const current = { x: 0, y: 0, active: 0 };
-    const lerp = (start, end, factor) => start + (end - start) * factor;
-
-    stage.addEventListener('mousemove', (e) => {
-      const rect = stage.getBoundingClientRect();
-      const nx = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-      const ny = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-
-      target.x = Math.max(-1, Math.min(1, nx));
-      target.y = Math.max(-1, Math.min(1, ny));
-      target.active = 1;
-
-      allCards.forEach((card) => {
-        const cardRect = card.getBoundingClientRect();
-        const gx = ((e.clientX - cardRect.left) / cardRect.width) * 100;
-        const gy = ((e.clientY - cardRect.top) / cardRect.height) * 100;
-        card.style.setProperty('--glare-x', `${gx}%`);
-        card.style.setProperty('--glare-y', `${gy}%`);
-      });
-    });
-
-    stage.addEventListener('mouseleave', () => {
-      target.x = 0;
-      target.y = 0;
-      target.active = 0;
-    });
-
-    function animateCards() {
-      current.x = lerp(current.x, target.x, 0.08);
-      current.y = lerp(current.y, target.y, 0.08);
-      current.active = lerp(current.active, target.active, 0.07);
-
-      const stackRotateY = current.x * 11;
-      const stackRotateX = -current.y * 9;
-      stack.style.transform = `rotateX(${stackRotateX}deg) rotateY(${stackRotateY}deg)`;
-
-      const spread = current.active * 14;
-
-      // Left card
-      const leftX = -58 - spread + current.x * -10;
-      const leftY = 12 + current.y * -6;
-      const leftRot = -15 - current.active * 3 + current.x * 2.5;
-      leftCard.style.transform = `translate3d(${leftX}px, ${leftY}px, -36px) rotate(${leftRot}deg)`;
-
-      // Right card
-      const rightX = 58 + spread + current.x * -10;
-      const rightY = 12 + current.y * -6;
-      const rightRot = 15 + current.active * 3 + current.x * 2.5;
-      rightCard.style.transform = `translate3d(${rightX}px, ${rightY}px, -36px) rotate(${rightRot}deg)`;
-
-      // Center card
-      const centerX = current.x * 8;
-      const centerY = current.y * 6;
-      const centerZ = 18 + current.active * 10;
-      centerCard.style.transform = `translate3d(${centerX}px, ${centerY}px, ${centerZ}px)`;
-
-      requestAnimationFrame(animateCards);
-    }
-
-    animateCards();
+    
   </script>
 
 
