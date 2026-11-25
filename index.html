@@ -1477,6 +1477,11 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
 
   
 </style>
+
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+  <script src="https://static.mailerlite.com/js/w/webforms.min.js?v646e2239910df1d4eb4ad82bb64fbfdc" type="text/javascript"></script>
+
+
 </head>
 
 <body class="bg-bodybg font-inter text-neutral-800">
@@ -2963,9 +2968,6 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
 
   <!-- MailerLite Tracking Pixel & Scripts -->
   <img src="https://track.mailerlite.com/webforms/o/6141456/e8d2e2?v1795479279" width="1" height="1" style="max-width:1px;max-height:1px;visibility:hidden;padding:0;margin:0;display:block" alt="." border="0" />
-  <script src="https://www.google.com/recaptcha/api.js" async defer></script>
-  <script src="https://static.mailerlite.com/js/w/webforms.min.js?v646e2239910df1d4eb4ad82bb64fbfdc" type="text/javascript"></script>
-
 
 
 
@@ -3238,6 +3240,89 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
     }
   });
 })();
+
+
+
+
+/* ---------------------------------------------------------
+   F. BOTÓN "VOLVER ARRIBA"
+   --------------------------------------------------------- */
+(function () {
+  const btn = document.createElement('button');
+  btn.id = 'backToTopBtn';
+  btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 19V5M5 12l7-7 7 7"/></svg>';
+  btn.setAttribute('aria-label', 'Volver arriba');
+  btn.title = 'Volver arriba';
+
+  const BASE_COLOR  = '#967e2d';
+  const HOVER_COLOR = '#ab9239';
+
+  Object.assign(btn.style, {
+    position: 'fixed',
+    bottom: '24px',
+    right: '24px',
+    width: '48px',
+    height: '48px',
+    padding: '0',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderRadius: '50%',
+    border: '1px solid rgba(255,255,255,.25)',
+    background: BASE_COLOR,
+    color: '#fff',
+    cursor: 'pointer',
+    boxShadow: '0 4px 12px rgba(0,0,0,0.25)',
+    opacity: '0',
+    visibility: 'hidden',
+    transform: 'translateY(10px) scale(1)',
+    transition: 'opacity .25s ease, transform .25s ease, visibility .25s, background .2s ease, box-shadow .25s ease',
+    zIndex: '9999'
+  });
+
+  const svg = btn.querySelector('svg');
+  svg.style.transition = 'transform .2s ease';
+
+  btn.addEventListener('mouseenter', () => {
+    btn.style.background = HOVER_COLOR;
+    btn.style.boxShadow = '0 8px 20px rgba(150,126,45,.45)';
+    svg.style.transform = 'translateY(-2px)';
+  });
+
+  btn.addEventListener('mouseleave', () => {
+    btn.style.background = BASE_COLOR;
+    btn.style.boxShadow = '0 4px 12px rgba(0,0,0,0.25)';
+    svg.style.transform = 'translateY(0)';
+  });
+
+  btn.addEventListener('click', () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+
+  document.body.appendChild(btn);
+
+  const toggleVisibility = () => {
+    if (window.scrollY > 400) {
+      btn.style.opacity = '1';
+      btn.style.visibility = 'visible';
+      btn.style.transform = 'translateY(0) scale(1)';
+    } else {
+      btn.style.opacity = '0';
+      btn.style.visibility = 'hidden';
+      btn.style.transform = 'translateY(10px) scale(1)';
+    }
+  };
+
+  window.addEventListener('scroll', toggleVisibility, { passive: true });
+  toggleVisibility();
+})();
+
+
+
+
+  
+
+  
 
 
 /* ---------------------------------------------------------
