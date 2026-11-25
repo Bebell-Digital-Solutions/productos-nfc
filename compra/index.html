@@ -719,6 +719,40 @@
       }
     }
 </script>
+
+
+
+
+
+
+
+
+
+<style>
+  #page-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.95);transition:opacity .6s ease,visibility .6s ease}
+  #page-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  #page-loader img{width:250px;max-width:80vw;height:auto}
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    var l=document.createElement('div');
+    l.id='page-loader';
+    l.setAttribute('role','status');
+    l.innerHTML='<img src="https://ik.imagekit.io/bebell/NFC%20Technology/graphic-assets/qit0NeZ9Xs.svg" alt="Loading">';
+    document.body.appendChild(l);
+    document.documentElement.style.overflow='hidden';
+    var done=function(){
+      l.classList.add('hidden');
+      document.documentElement.style.overflow='';
+      setTimeout(function(){l.remove()},700);
+    };
+    setTimeout(done,5000);
+  });
+</script>
+
+
+
+  
     
     
     
