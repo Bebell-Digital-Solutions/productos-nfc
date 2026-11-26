@@ -2095,7 +2095,7 @@ box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5), inset 0 2px 4px rgba(255, 255, 25
           <li><a href="https://shop.tarjeta-digial.site" class="transition hover:text-white">Inicio</a></li>
           <li><a href="https://shop.tarjeta-digial.site/servicios" class="transition hover:text-white">Servicios</a></li>
           <li><a href="https://shop.tarjeta-digial.site/catalogo" class="transition hover:text-white">Catálogo</a></li>
-          <li><a href="https://shop.tarjeta-digial.site/testimonios" class="transition hover:text-white">Testimonios</a></li>
+          <li><a href="/testimonios" class="transition hover:text-white">Testimonios</a></li>
           <li><a href="https://uso.tarjeta-digital.site" class="transition hover:text-white">Centro de Ayuda</a></li>
           <li><a href="https://shop.tarjeta-digial.site/recursos" class="transition hover:text-white">Recursos</a></li>
         </ul>
@@ -2982,6 +2982,34 @@ document.getElementById('year').textContent = new Date().getFullYear();
 </script>
   
   
+
+
+<style>
+  #page-loader{position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.95);transition:opacity .6s ease,visibility .6s ease}
+  #page-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+  #page-loader img{width:250px;max-width:80vw;height:auto}
+</style>
+<script>
+  document.addEventListener('DOMContentLoaded',function(){
+    var l=document.createElement('div');
+    l.id='page-loader';
+    l.setAttribute('role','status');
+    l.innerHTML='<img src="https://ik.imagekit.io/bebell/NFC%20Technology/graphic-assets/qit0NeZ9Xs.svg" alt="Loading">';
+    document.body.appendChild(l);
+    document.documentElement.style.overflow='hidden';
+    var done=function(){
+      l.classList.add('hidden');
+      document.documentElement.style.overflow='';
+      setTimeout(function(){l.remove()},700);
+    };
+    setTimeout(done,5000);
+  });
+</script>
+
+
+
+
+
   
   
   
